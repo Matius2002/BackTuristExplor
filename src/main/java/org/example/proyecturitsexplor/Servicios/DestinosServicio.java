@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -79,5 +80,8 @@ public class DestinosServicio {
     //Verificar si existe en la base. por nombre
     public boolean verificarDestinoExistente(String destinoName) {
         return destinosRepositorio.existsByDestinoName(destinoName);
+    }
+    public Optional<Destinos> obtenerDestinoPorId(Long id) {
+        return destinosRepositorio.findById(id);
     }
 }

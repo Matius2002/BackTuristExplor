@@ -1,31 +1,61 @@
 package org.example.proyecturitsexplor.Controlador;
+import org.example.proyecturitsexplor.DTO.ExperienciaDTO;
+import org.example.proyecturitsexplor.Entidades.Destinos;
 import org.example.proyecturitsexplor.Entidades.Experiencia;
+import org.example.proyecturitsexplor.Entidades.Usuarios;
+import org.example.proyecturitsexplor.Excepciones.ExperienciaNotFoundException;
+import org.example.proyecturitsexplor.Excepciones.UserNotFoundException;
+import org.example.proyecturitsexplor.Repositorios.DestinosRepositorio;
 import org.example.proyecturitsexplor.Repositorios.ExperienciaRepositorio;
+import org.example.proyecturitsexplor.Servicios.DestinosServicio;
 import org.example.proyecturitsexplor.Servicios.ExperienciaServicio;
+import org.example.proyecturitsexplor.Servicios.UserServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin (origins = "http://localhost:8080")
+//(origins = "http://localhost:8080")
 public class ExperienciaControlador {
     @Autowired
     private ExperienciaRepositorio experienciaRepositorio;
     @Autowired
     private ExperienciaServicio experienciaServicio;
+    @Autowired
+    private UserServicio userServicio;
+    @Autowired
+    private DestinosRepositorio destinosRepositorio;
+    @Autowired
+    private DestinosServicio destinosServicio;
 
     //CRUD
+
     @PostMapping("/experiencias/guardarExperiencia")
-    public ResponseEntity<Experiencia> guardarExperiencia(@RequestBody Experiencia experiencia) {
-        if (experiencia.getDestino()==null || experiencia.getUsuario()==null ||
-                experiencia.getCalificacion()==null || experiencia.getComentario()==null || experiencia.getFecha()==null){
-            return  ResponseEntity.badRequest().build();
-        }
-        Experiencia experienciaGuardado = experienciaServicio.guardarExperiencia(experiencia);
-        return ResponseEntity.status(HttpStatus.CREATED).body(experienciaGuardado);
+    public ResponseEntity<Experiencia> guardarExperiencia(@RequestBody ExperienciaDTO experienciaDTO) {
+        // Obtener el usuario autenticado
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Usuarios usuarioAutenticado = userServicio.findByEmail(email).orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
+
+        // Obtener el destino por ID
+        Destinos destino = destinosRepositorio.findById(experienciaDTO.getDestinoId())
+                .orElseThrow(() -> new IllegalArgumentException("Destino no encontrado"));
+
+        // Crear la experiencia
+        Experiencia experiencia = new Experiencia(destino, usuarioAutenticado, experienciaDTO.getCalificacion(), experienciaDTO.getComentario(), new Date());
+
+        // Guardar la experiencia
+        Experiencia experienciaGuardada = experienciaServicio.guardarExperiencia(experiencia);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(experienciaGuardada);
     }
 
     //Recuperar todos las experiencia

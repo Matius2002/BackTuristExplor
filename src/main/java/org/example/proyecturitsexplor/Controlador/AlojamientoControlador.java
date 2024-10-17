@@ -5,30 +5,37 @@ import org.example.proyecturitsexplor.Servicios.AlojamientoServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @Controller
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin (origins = "http://localhost:8080")
+//(origins = "http://localhost:8080")
 public class AlojamientoControlador {
     @Autowired
     private AlojamientoRepositorio alojamientoRepositorio;
     @Autowired
     private AlojamientoServicio alojamientoServicio;
 
+    @PreAuthorize("permitAll()")
     //CRUD
     @PostMapping("/alojamientos/guardarAlojamientos")
     public ResponseEntity<Alojamiento> guardarAlojamiento(@RequestBody Alojamiento alojamiento) {
-        if (alojamiento.getNombre() == null || alojamiento.getDescripcion()==null || alojamiento.getEmail() == null || alojamiento.getTipoAlojamiento() == null ||
-                alojamiento.getCelular() == null || alojamiento.getDestinos() == null || alojamiento.getDireccion() == null ||
-                alojamiento.getFechaActualizacion() == null || alojamiento.getFechaCreacion() == null || alojamiento.getPrecioGeneral() == null ||
-                alojamiento.getWebUrl() == null) {
+
+        if (alojamiento.getNombre() == null || alojamiento.getDescripcion() == null || alojamiento.getEmail() == null ||
+                alojamiento.getTipoAlojamiento() == null || alojamiento.getCelular() == null || alojamiento.getDestinos() == null ||
+                alojamiento.getDireccion() == null || alojamiento.getFechaCreacion() == null || alojamiento.getPrecioGeneral() == null ||
+                alojamiento.getWebUrl() == null || alojamiento.getImagenes() == null) {
             return ResponseEntity.badRequest().build();
         }
+
         Alojamiento alojamientoGuardado = alojamientoServicio.guardarAlojamiento(alojamiento);
         return ResponseEntity.status(HttpStatus.CREATED).body(alojamientoGuardado);
     }
+
+
 
     //recuperar todos los alojamientos
     @GetMapping("/alojamientos/obtenerTodosLosAlojamientos")

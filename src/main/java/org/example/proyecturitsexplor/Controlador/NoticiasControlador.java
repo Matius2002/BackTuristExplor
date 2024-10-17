@@ -11,7 +11,8 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin (origins = "http://localhost:8080")
+//(origins = "http://localhost:8080")
 public class NoticiasControlador {
     @Autowired
     private NoticiasRepositorio noticiasRepositorio;
@@ -20,14 +21,18 @@ public class NoticiasControlador {
 
     //CRUD
     @PostMapping("/noticias/guardarNoticias")
-    public ResponseEntity<Noticia> guardarNoticias(@RequestBody Noticia noticias) {
-        if (noticias.getTitulo()==null || noticias.getContenido()==null
-                || noticias.getFechaPublicacion()==null || noticias.getFuente()==null
-                || noticias.getImages()==null || noticias.getTipoTurismo()==null){
-            return  ResponseEntity.badRequest().build();
+    public ResponseEntity<?> guardarNoticias(@RequestBody Noticia noticia) {
+        if (noticia.getTitulo() == null || noticia.getContenido() == null
+                || noticia.getFechaPublicacion() == null || noticia.getFuente() == null
+                || noticia.getTipoTurismo() == null || noticia.getImages() == null) {
+            return ResponseEntity.badRequest().body("Faltan campos obligatorios");
         }
-        Noticia noticiasGuardado = noticiasServicio.guardarNoticias(noticias);
-        return ResponseEntity.status(HttpStatus.CREATED).body(noticiasGuardado);
+        try {
+            Noticia nuevaNoticia = noticiasServicio.guardarNoticias(noticia);
+            return ResponseEntity.status(HttpStatus.CREATED).body(nuevaNoticia);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al guardar la noticia: " + e.getMessage());
+        }
     }
 
     //Recuperar todos los Noticias

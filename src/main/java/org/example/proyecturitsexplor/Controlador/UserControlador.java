@@ -1,28 +1,40 @@
 package org.example.proyecturitsexplor.Controlador;
+import jakarta.servlet.http.HttpServletRequest;
 import org.example.proyecturitsexplor.Entidades.Usuarios;
 import org.example.proyecturitsexplor.Repositorios.UserRepositorio;
 import org.example.proyecturitsexplor.Servicios.UserServicio;
+import org.example.proyecturitsexplor.Servicios.auth.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin (origins = "http://localhost:8080")
+//(origins = "http://localhost:8080")
 public class UserControlador {
     @Autowired
     private UserRepositorio userRepositorio;
     @Autowired
     private UserServicio userServicio;
+    @Autowired
+    private AuthenticationService authenticationService;
 
-    //CRUD
+    // CRUD para Usuarios
+
+    //CONTROLADOR LIBRE
+    @PreAuthorize("permitAll()")
     @PostMapping("/usuarios/guardarUsuario")
     public ResponseEntity<Usuarios> guardarUsuario(@RequestBody Usuarios usuarios) {
         if (usuarios.getNombreUsuario()==null || usuarios.getEmail()==null ||
-                usuarios.getFechaRegistro()==null || usuarios.getRoles()==null || usuarios.getPassword()==null){
+                usuarios.getRoles()==null || usuarios.getPassword()==null){
             return  ResponseEntity.badRequest().build();
         }
         Usuarios usuarioGuardado = userServicio.guardarUsuarios(usuarios);
@@ -88,15 +100,37 @@ public class UserControlador {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al verificar si el usuario existe por correo electrónico: " + e.getMessage());
         }
     }
-    @PostMapping("/usuarios/login")
-    public ResponseEntity<?> loginUsuario(@RequestBody Usuarios usuario){
-        return userServicio.loginUsuario(usuario);
+
+    @GetMapping("/usuarios/profile")
+    public ResponseEntity<?> verPerfil(){
+        return ResponseEntity.ok(this.authenticationService.findLoggedUser());
     }
+
+    @PostMapping("/renew-token")
+    public ResponseEntity<Map<String, Object>> renewToken(HttpServletRequest request) {
+        String token = authenticationService.resolveToken(request);
+
+        if (token == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Token no encontrado en la solicitud"));
+        }
+
+        if (!authenticationService.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Token inválido o expirado"));
+        }
+
+        String renewedToken = authenticationService.renewToken(token);
+
+        if (renewedToken == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "No se pudo renovar el token"));
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", renewedToken);
+        response.put("expirationTime", authenticationService.getExpirationTime(renewedToken));
+
+        return ResponseEntity.ok(response);
+    }
+
+
 }
 
-//    // Método para generar el token JWT
-//    private String generateJwtToken(String username) {
-//        // Lógica para generar el token JWT
-//        // Puedes usar librerías como JJwt
-//        return "token_jwt_generado";
-//    }

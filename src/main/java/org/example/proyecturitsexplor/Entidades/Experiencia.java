@@ -1,5 +1,8 @@
 package org.example.proyecturitsexplor.Entidades;
+
 import jakarta.persistence.*;
+import org.example.proyecturitsexplor.ENUM.Calificacion;
+
 import java.util.Date;
 
 @Entity
@@ -20,10 +23,12 @@ public class Experiencia {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuarios usuario;
 
-    @Column(name = "calificacion", nullable = false)
-    private String calificacion;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Calificacion calificacion;  // Cambiado a enum Calificacion
 
-    @Column(name = "comentario", length = 500)
+
+    @Column(name = "comentario")
     private String comentario;
 
     @Column(name = "fecha", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -33,15 +38,14 @@ public class Experiencia {
     // Constructores
     public Experiencia() {}
 
-    public Experiencia(Destinos destino, Usuarios usuario, String calificacion, String comentario, Date fecha) {
+    public Experiencia(Destinos destino, Usuarios usuario, Calificacion calificacion, String comentario, Date fecha) {
         this.destino = destino;
         this.usuario = usuario;
-        this.calificacion = calificacion;
+        this.calificacion = calificacion;  // Cambiado a enum Calificacion
         this.comentario = comentario;
         this.fecha = fecha;
     }
 
-    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -66,11 +70,11 @@ public class Experiencia {
         this.usuario = usuario;
     }
 
-    public String getCalificacion() {
+    public Calificacion getCalificacion() {  // Cambiado a enum Calificacion
         return calificacion;
     }
 
-    public void setCalificacion(String calificacion) {
+    public void setCalificacion(Calificacion calificacion) {  // Cambiado a enum Calificacion
         this.calificacion = calificacion;
     }
 
@@ -90,14 +94,13 @@ public class Experiencia {
         this.fecha = fecha;
     }
 
-    // Método toString()
     @Override
     public String toString() {
         return "Experiencia{" +
                 "id=" + id +
                 ", destino=" + destino +
                 ", usuario=" + usuario +
-                ", calificacion=" + calificacion +
+                ", calificacion=" + calificacion +  // Actualizado a enum Calificacion
                 ", comentario='" + comentario + '\'' +
                 ", fecha=" + fecha +
                 '}';

@@ -13,7 +13,8 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin (origins = "http://localhost:8080")
+//(origins = "http://localhost:8080")
 public class TipoAlojamientoControlador {
 
     @Autowired
@@ -24,7 +25,7 @@ public class TipoAlojamientoControlador {
     //CRUD
     @PostMapping("/tipoAlojamientos/guardarTipoAlojamientos")
     public ResponseEntity<TipoAlojamiento> guardarTipoAlojamiento(@RequestBody TipoAlojamiento tipoAlojamiento) {
-        if (tipoAlojamiento.getNombre()==null || tipoAlojamiento.getDescripcion()==null || tipoAlojamiento.getServicios()==null || Double.isNaN(tipoAlojamiento.getPrecioPromedio())){
+        if (tipoAlojamiento.getNombre()==null || tipoAlojamiento.getDescripcion()==null || tipoAlojamiento.getServicios()==null || (tipoAlojamiento.getPrecioPromedio()==null)){
             return  ResponseEntity.badRequest().build();
         }
         TipoAlojamiento tipoAlojamientoGuardado = tipoAlojamientoServicio.guardarTipoAlojamiento(tipoAlojamiento);

@@ -16,7 +16,8 @@ import java.util.Set;
 
 @Controller
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin (origins = "http://localhost:8080")
+//(origins = "http://localhost:8080")
 public class PermisoControlador {
     @Autowired
     private PermisoServicio permisoServicio;
@@ -70,7 +71,7 @@ public class PermisoControlador {
         // Verificar si el usuario existe
         if (usuario != null) {
             // Obtener los roles del usuario
-            Set<Rol> rolesUsuario = usuario.getRoles();
+            List<Rol> rolesUsuario = usuario.getRoles();
 
             // Verificar si el usuario tiene el rol de administrador
             for (Rol rol : rolesUsuario) {
