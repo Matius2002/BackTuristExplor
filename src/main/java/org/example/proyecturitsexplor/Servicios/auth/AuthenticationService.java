@@ -1,4 +1,5 @@
 package org.example.proyecturitsexplor.Servicios.auth;
+
 import jakarta.servlet.http.HttpServletRequest;
 import org.example.proyecturitsexplor.DTO.LoginRequestDTO;
 import org.example.proyecturitsexplor.DTO.LoginResponseDTO;
@@ -18,81 +19,146 @@ import java.util.*;
 @Service
 public class AuthenticationService {
     @Autowired
-    private AuthenticationManager authManager;
+    private AuthenticationManager authManager;  // Manager encargado de autenticar al usuario
     @Autowired
-    private JWTService jwtService;
+    private JWTService jwtService;  // Servicio para generar y validar JWT
     @Autowired
-    private UserRepositorio userRep;
+    private UserRepositorio userRep;  // Repositorio para interactuar con la base de datos de usuarios
 
+    /**
+     * Metodo para obtener el tiempo de expiración de un token JWT.
+     *
+     * @param token Token JWT cuyo tiempo de expiración se desea obtener.
+     * @return Fecha de expiración del token.
+     */
     public Date getExpirationTime(String token) {
-        return jwtService.extractExpiration(token);
+        return jwtService.extractExpiration(token);  // Extrae la fecha de expiración usando el JWTService
     }
 
+    /**
+     * Metodo para autenticar un usuario y generar un token JWT.
+     *
+     * @param credenciales DTO que contiene el email y la contraseña del usuario.
+     * @return LoginResponseDTO que contiene el token JWT.
+     * @throws BadCredentialsException si las credenciales son incorrectas.
+     */
     public LoginResponseDTO login(LoginRequestDTO credenciales) {
-        UsernamePasswordAuthenticationToken upat=new UsernamePasswordAuthenticationToken(
+        // Crear el token de autenticación con las credenciales del usuario
+        UsernamePasswordAuthenticationToken upat = new UsernamePasswordAuthenticationToken(
                 credenciales.getEmail(), credenciales.getPassword()
         );
-        try{
+
+        try {
+            // Intentar autenticar al usuario
             authManager.authenticate(upat);
-        }catch(Exception e){
+        } catch (Exception e) {
+            // Manejo de excepción cuando las credenciales son incorrectas
             if (e instanceof BadCredentialsException) {
-                throw new org.example.proyecturitsexplor.Excepciones.BadCredentialsException("Correo o contraseña incorrectos", "400", "Error de credenciales", HttpStatus.BAD_REQUEST);
+                throw new org.example.proyecturitsexplor.Excepciones.BadCredentialsException(
+                        "Correo o contraseña incorrectos", "400", "Error de credenciales", HttpStatus.BAD_REQUEST
+                );
             }
         }
-        Usuarios usuario=this.userRep.findByEmail(credenciales.getEmail()).get();
+
+        // Si la autenticación es exitosa, obtener el usuario de la base de datos
+        Usuarios usuario = this.userRep.findByEmail(credenciales.getEmail()).get();
+
+        // Generar el token JWT para el usuario autenticado
         return new LoginResponseDTO(this.jwtService.generarToken(usuario, generarClaims(usuario)));
     }
 
+    /**
+     * Metodo para generar los "claims" (información adicional) que se incluirán en el token JWT.
+     *
+     * @param usuario El usuario del que se generarán los claims.
+     * @return Un mapa con los claims.
+     */
     private Map<String, Object> generarClaims(Usuarios usuario) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", usuario.getId());
         claims.put("username", usuario.getNombreUsuario());
         List<String> permisos = new ArrayList<>();
-        usuario.getAuthorities().forEach(a->permisos.add(a.getAuthority()));
+
+        // Agregar permisos del usuario al mapa de claims
+        usuario.getAuthorities().forEach(a -> permisos.add(a.getAuthority()));
         claims.put("permisos", permisos);
         claims.put("correo", usuario.getEmail());
         return claims;
     }
 
-    public UserResponseDTO findLoggedUser(){
-        String email=(String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Usuarios usuario=this.userRep.findByEmail(email).orElseThrow(()->new UserNotFoundException(email));
+    /**
+     * Metodo para obtener los datos del usuario actualmente autenticado.
+     *
+     * @return Un DTO con la información del usuario autenticado.
+     */
+    public UserResponseDTO findLoggedUser() {
+        // Obtener el email del usuario autenticado desde el contexto de seguridad
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        // Buscar al usuario por su email
+        Usuarios usuario = this.userRep.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
+
+        // Retornar el DTO con los datos del usuario
         return new UserResponseDTO(usuario.getId(), usuario.getNombreUsuario(), usuario.getEmail());
     }
+
+    /**
+     * Metodo para validar si un token JWT es válido.
+     *
+     * @param jwt El token JWT a validar.
+     * @return true si el token es válido, false si es inválido.
+     */
     public boolean validateToken(String jwt) {
-        try{
+        try {
+            // Intentar extraer el nombre de usuario del token
             jwtService.extractUsername(jwt);
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
+            // Si ocurre algún error, el token es inválido
             System.out.println(e.getMessage());
             return false;
         }
     }
 
+    /**
+     * Metodo para renovar un token JWT.
+     *
+     * @param token El token JWT a renovar.
+     * @return El nuevo token JWT renovado.
+     */
     public String renewToken(String token) {
-        // Lógica para renovar el token
         String renewedToken = null;
         try {
-            if (jwtService.validateToken(token)) { // Valida si el token actual es válido
-                String username = jwtService.extractUsername(token); // Extrae el nombre de usuario del token
+            // Validar si el token actual es válido
+            if (jwtService.validateToken(token)) {
+                String username = jwtService.extractUsername(token);  // Extraer el nombre de usuario del token
+
+                // Buscar al usuario por su email
                 Usuarios usuario = userRep.findByEmail(username).orElseThrow(() -> new UserNotFoundException(username));
-                renewedToken = jwtService.generarToken(usuario, generarClaims(usuario)); // Genera un nuevo token renovado
+
+                // Generar un nuevo token JWT
+                renewedToken = jwtService.generarToken(usuario, generarClaims(usuario));
             }
         } catch (Exception e) {
-            // Manejo de excepciones si la renovación del token falla
+            // Manejo de errores si la renovación del token falla
             throw new RuntimeException("Error al renovar el token", e);
         }
         return renewedToken;
     }
 
+    /**
+     * Metodo para resolver el token JWT desde el encabezado de una solicitud HTTP.
+     *
+     * @param request La solicitud HTTP que contiene el token en el encabezado Authorization.
+     * @return El token JWT extraído del encabezado o null si no se encuentra.
+     */
     public String resolveToken(HttpServletRequest request) {
-        // Lógica para extraer el token del encabezado de la solicitud
         final String header = request.getHeader("Authorization");
 
-        // Verifica si el encabezado es válido y devuelve el token
+        // Verificar si el encabezado contiene un token válido
         if (header != null && header.startsWith("Bearer ")) {
-            return header.substring(7); // Quita el prefijo "Bearer " del token
+            return header.substring(7);  // Quitar el prefijo "Bearer " y retornar el token
         }
-        return null; // Retorna null si no se encontró un token válido en el encabezado
+        return null;  // Retornar null si no se encuentra el token
     }
 }
