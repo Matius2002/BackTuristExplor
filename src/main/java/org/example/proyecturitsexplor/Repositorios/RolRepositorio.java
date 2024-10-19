@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface RolRepositorio extends JpaRepository<Rol, Long> {
 
+    // Metodo para verificar si existe un Rol por su nombre
+    // Este metodo consulta si hay alguna entidad Rol con el nombre proporcionado
     boolean existsByRolName(String rolName);
-
 }
