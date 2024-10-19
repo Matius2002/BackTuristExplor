@@ -5,4 +5,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface PermisoRepositorio extends JpaRepository<Permiso, Long> {
+    // Este es un repositorio que extiende JpaRepository para la entidad Permiso.
+    // Proporciona métodos CRUD estándar como save(), findById(), findAll(), delete(), entre otros.
 }
