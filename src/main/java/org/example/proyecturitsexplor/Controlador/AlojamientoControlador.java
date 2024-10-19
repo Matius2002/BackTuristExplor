@@ -27,7 +27,7 @@ public class AlojamientoControlador {
     @Autowired
     private AlojamientoServicio alojamientoServicio;
 
-    // Permite que cualquier usuario acceda a este método sin necesidad de autenticación
+    // Permite que cualquier usuario acceda a este metodo sin necesidad de autenticación
     @PreAuthorize("permitAll()")
     // Mapea solicitudes HTTP POST a la ruta especificada
     @PostMapping("/alojamientos/guardarAlojamientos")
