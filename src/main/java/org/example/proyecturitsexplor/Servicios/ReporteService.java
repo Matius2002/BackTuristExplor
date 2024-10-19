@@ -1,6 +1,5 @@
 package org.example.proyecturitsexplor.Servicios;
 
-
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.colors.DeviceRgb;
@@ -60,12 +59,6 @@ public class ReporteService {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Usuarios");
 
-        // Cargar el logo (imagen en formato byte[] de la ruta)
-        // InputStream logoStream = new FileInputStream("src/main/images/escudo_alcaldia.jpeg");
-        // byte[] logoBytes = IOUtils.toByteArray(logoStream);
-        // int pictureIdx = workbook.addPicture(logoBytes, Workbook.PICTURE_TYPE_PNG);
-        // logoStream.close();
-
         // Crear un helper de dibujo para agregar el logo
         Drawing<?> drawing = sheet.createDrawingPatriarch();
         ClientAnchor anchor = workbook.getCreationHelper().createClientAnchor();
@@ -73,10 +66,6 @@ public class ReporteService {
         anchor.setRow1(0); // Fila inicial
         anchor.setCol2(3); // Columna final (ajustando el ancho del logo)
         anchor.setRow2(2); // Fila final (ajustando la altura del logo)
-
-        // Insertar el logo en la hoja
-        //Picture pict = drawing.createPicture(anchor, pictureIdx);
-        //pict.resize(0.5); // Ajusta el tamaño del logo
 
         // Estilos personalizados
         CellStyle headerStyle = workbook.createCellStyle();
@@ -302,8 +291,8 @@ public class ReporteService {
             Canvas canvas = new Canvas(new PdfCanvas(page), page.getPageSize());
             canvas.showTextAligned(pageParagraph, x, y, TextAlignment.RIGHT);
         }
-
     }
+
     public InputStream generarReporteComentarios(String format) {
         if (format.equals("pdf")) {
             return generarReporteComentariosPDF();
@@ -332,10 +321,6 @@ public class ReporteService {
             anchor.setRow1(0); // Fila inicial
             anchor.setCol2(3); // Columna final (ajustando el ancho del logo)
             anchor.setRow2(2); // Fila final (ajustando la altura del logo)
-
-            // Insertar el logo en la hoja
-            //Picture pict = drawing.createPicture(anchor, pictureIdx);
-            //pict.resize(0.5); // Ajusta el tamaño del logo
 
             // Estilos personalizados
             CellStyle headerStyle = workbook.createCellStyle();
@@ -529,6 +514,4 @@ public class ReporteService {
             return new ByteArrayInputStream(new byte[0]);
         }
     }
-
-
 }
