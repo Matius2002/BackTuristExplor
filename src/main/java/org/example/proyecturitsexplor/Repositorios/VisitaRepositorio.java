@@ -8,8 +8,9 @@ import java.util.List;
 
 public interface VisitaRepositorio extends JpaRepository<Visita, Long> {
 
-//    List<Visita> findByTipoTurismo(String tipoTurismo);
+   // Metodo para encontrar visitas por el tipo de turismo
+   // Este metodo consulta todas las visitas que están asociadas a un tipo específico de turismo
+   // Recibe un objeto TipoTurismo y devuelve una lista de entidades Visita que corresponden a ese tipo de turismo
    public List<Visita> findByTipoTurismo(TipoTurismo tipoTurismo);
-
-
 }
+
