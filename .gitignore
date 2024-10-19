@@ -1,33 +1,39 @@
-HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# Archivos generados por Maven
+HELP.md                        # Archivo de ayuda que puede ser generado por herramientas de Maven.
+target/                        # Ignorar carpeta 'target' donde Maven genera los archivos compilados y el artefacto final.
+!.mvn/wrapper/maven-wrapper.jar # No ignorar el archivo 'maven-wrapper.jar', necesario para ejecutar Maven desde cualquier sistema.
+!**/src/main/**/target/         # No ignorar las carpetas 'target' dentro de 'src/main', ya que podrían tener archivos necesarios para el desarrollo.
+!**/src/test/**/target/         # No ignorar las carpetas 'target' dentro de 'src/test', necesarias para las pruebas.
 
+# Archivos y carpetas generados por Spring Tool Suite (STS)
 ### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+.apt_generated                 # Archivos generados por el procesador de anotaciones de Java.
+.classpath                     # Archivo de configuración que contiene la ruta de clases para el proyecto en Eclipse.
+.factorypath                   # Archivo de configuración que contiene la ruta de fábricas para el proyecto en Eclipse.
+.project                       # Archivo de configuración de proyecto de Eclipse.
+.settings                      # Carpeta con la configuración de Eclipse.
+.springBeans                   # Archivos generados para la administración de beans de Spring en STS.
+.sts4-cache                   # Caché usada por Spring Tool Suite.
 
+# Archivos y carpetas generados por IntelliJ IDEA
 ### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
+.idea                          # Carpeta de configuración del proyecto en IntelliJ IDEA.
+*.iws                          # Archivo de configuración de ventana de proyecto en IntelliJ IDEA.
+*.iml                          # Archivos de configuración de módulos en IntelliJ IDEA.
+*.ipr                          # Archivo de configuración de proyecto en IntelliJ IDEA.
 
+# Archivos y carpetas generados por NetBeans
 ### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+/nbproject/private/            # Carpeta privada de configuración de NetBeans, ignorada.
+/nbbuild/                      # Archivos de construcción generados por NetBeans.
+*/dist/                        # Carpeta de distribución generada por NetBeans.
+*/nbdist/                      # Archivos de distribución generados por NetBeans.
+*/nb-gradle/                   # Archivos relacionados con Gradle en NetBeans.
+build/                        # Carpeta de construcción.
+!**/src/main/**/build/         # No ignorar la carpeta de 'build' dentro de 'src/main'.
+!**/src/test/**/build/         # No ignorar la carpeta de 'build' dentro de 'src/test'.
 
+# Archivos y carpetas generados por Visual Studio Code
 ### VS Code ###
-.vscode/
+.vscode/                       # Carpeta de configuración del proyecto en Visual Studio Code.
+
