@@ -19,14 +19,14 @@ public class AutenticacionControlador {
     @Autowired
     private AuthenticationService authService;
 
-    @PreAuthorize("permitAll()") //Indica que este método es accesible para todos, sin necesidad de autenticación previa.
-    @PostMapping("/login") //Define que este método responderá a solicitudes HTTP POST en la ruta /api/login
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO credenciales) { //El método recibe un objeto LoginRequestDTO en el cuerpo de la solicitud (@RequestBody)
-        return ResponseEntity.ok(this.authService.login(credenciales)); //El método llama al servicio de autenticación (authService.login(credenciales)) para autenticar las credenciales.
+    @PreAuthorize("permitAll()") //Indica que este metodo es accesible para todos, sin necesidad de autenticación previa.
+    @PostMapping("/login") //Define que este metodo responderá a solicitudes HTTP POST en la ruta /api/login
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO credenciales) { //El metodo recibe un objeto LoginRequestDTO en el cuerpo de la solicitud (@RequestBody)
+        return ResponseEntity.ok(this.authService.login(credenciales)); //El metodo llama al servicio de autenticación (authService.login(credenciales)) para autenticar las credenciales.
         //ResponseEntity.ok(...) devuelve una respuesta HTTP 200 con un objeto LoginResponseDTO si la autenticación es exitosa.
     }
 
-    @GetMapping("/validateToken") //Define que este método responderá a solicitudes HTTP GET en la ruta /api/validateToken.
+    @GetMapping("/validateToken") //Define que este metodo responderá a solicitudes HTTP GET en la ruta /api/validateToken.
     public ResponseEntity<Boolean> validateToken(@RequestParam String token) { //Recibe un parámetro token en la URL (@RequestParam).
         boolean isTokenValid = this.authService.validateToken(token); //Llama al servicio de autenticación (authService.validateToken(token)) para verificar si el token es válido.
         return ResponseEntity.ok(isTokenValid); //devuelve una respuesta HTTP 200 con un valor booleano (true o false) que indica si el token es válido o no.
