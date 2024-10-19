@@ -1,102 +1,136 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<!-- Versión del modelo POM -->
 	<modelVersion>4.0.0</modelVersion>
+
+	<!-- Parent Project (Spring Boot Starter Parent) -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.9</version>
+		<version>3.2.9</version> <!-- Versión de Spring Boot -->
 		<relativePath/>
 	</parent>
-	<groupId>org.example</groupId>
-	<artifactId>ProyecTuritsExplor</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>ProyecTuritsExplor</name>
-	<description>ProyecTuritsExplor</description>
+
+	<!-- Información general del proyecto -->
+	<groupId>org.example</groupId> <!-- Grupo del proyecto -->
+	<artifactId>ProyecTuritsExplor</artifactId> <!-- Nombre del proyecto -->
+	<version>0.0.1-SNAPSHOT</version> <!-- Versión del proyecto -->
+	<name>ProyecTuritsExplor</name> <!-- Nombre del proyecto -->
+	<description>ProyecTuritsExplor</description> <!-- Descripción del proyecto -->
+
+	<!-- Propiedades del proyecto -->
 	<properties>
-		<java.version>21</java.version>
+		<java.version>21</java.version> <!-- Versión de Java utilizada -->
 	</properties>
 
+	<!-- Dependencias del proyecto -->
 	<dependencies>
+
+		<!-- Dependencia de Spring Boot Data JPA -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId> <!-- Proporciona soporte para JPA y acceso a bases de datos -->
 		</dependency>
 
+		<!-- Dependencia de Spring Boot Web (para controladores y API REST) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<artifactId>spring-boot-starter-web</artifactId> <!-- Soporte para crear aplicaciones web y REST -->
 		</dependency>
+
+		<!-- Dependencia de Spring Boot DevTools (solo para desarrollo) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
+			<artifactId>spring-boot-devtools</artifactId> <!-- Herramientas de desarrollo como recarga automática -->
+			<scope>runtime</scope> <!-- Solo se usa en tiempo de ejecución -->
+			<optional>true</optional> <!-- Es una dependencia opcional -->
 		</dependency>
+
+		<!-- Dependencia del controlador de PostgreSQL para la base de datos -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<scope>runtime</scope>
+			<artifactId>postgresql</artifactId> <!-- Controlador JDBC para PostgreSQL -->
+			<scope>runtime</scope> <!-- Solo se usa en tiempo de ejecución -->
 		</dependency>
+
+		<!-- Dependencia para pruebas de Spring Boot -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
+			<artifactId>spring-boot-starter-test</artifactId> <!-- Soporte para pruebas unitarias -->
+			<scope>test</scope> <!-- Solo se usa para pruebas -->
 		</dependency>
+
+		<!-- Dependencia de Spring Security -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
+			<artifactId>spring-boot-starter-security</artifactId> <!-- Proporciona seguridad básica para la aplicación -->
 		</dependency>
+
+		<!-- Dependencia para pruebas de seguridad en Spring -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-test</artifactId>
-			<scope>test</scope>
+			<artifactId>spring-security-test</artifactId> <!-- Herramientas para pruebas de seguridad -->
+			<scope>test</scope> <!-- Solo se usa para pruebas -->
 		</dependency>
+
+		<!-- Dependencia de Apache POI para manipular archivos Excel (XLSX) -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
-			<artifactId>poi-ooxml</artifactId>
-			<version>5.2.3</version>
+			<artifactId>poi-ooxml</artifactId> <!-- Permite la creación y lectura de archivos Excel (.xlsx) -->
+			<version>5.2.3</version> <!-- Especifica la versión de Apache POI -->
+		</dependency>
+
+		<!-- Dependencias de iTextPDF para crear archivos PDF -->
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>kernel</artifactId> <!-- Biblioteca principal para crear PDFs -->
+			<version>7.2.6</version> <!-- Especifica la versión de iTextPDF -->
 		</dependency>
 		<dependency>
 			<groupId>com.itextpdf</groupId>
-			<artifactId>kernel</artifactId>
-			<version>7.2.6</version>
+			<artifactId>layout</artifactId> <!-- Complemento para diseño de PDFs -->
+			<version>7.2.6</version> <!-- Especifica la versión de iTextPDF -->
 		</dependency>
+
+		<!-- Dependencias para manejar JWT (JSON Web Tokens) -->
 		<dependency>
-			<groupId>com.itextpdf</groupId>
-			<artifactId>layout</artifactId>
-			<version>7.2.6</version>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId> <!-- API para trabajar con JWT -->
+			<version>0.12.5</version> <!-- Especifica la versión de JWT API -->
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt-api</artifactId>
-			<version>0.12.5</version>
+			<artifactId>jjwt-impl</artifactId> <!-- Implementación de la API JWT -->
+			<version>0.12.5</version> <!-- Especifica la versión de JWT Impl -->
+			<scope>runtime</scope> <!-- Solo se usa en tiempo de ejecución -->
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt-impl</artifactId>
-			<version>0.12.5</version>
-			<scope>runtime</scope>
+			<artifactId>jjwt-jackson</artifactId> <!-- Integración de Jackson con JWT -->
+			<version>0.12.5</version> <!-- Especifica la versión de JWT Jackson -->
+			<scope>runtime</scope> <!-- Solo se usa en tiempo de ejecución -->
 		</dependency>
-		<dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt-jackson</artifactId>
-			<version>0.12.5</version>
-			<scope>runtime</scope>
-		</dependency>
+
+		<!-- Dependencia de Hibernate Core -->
 		<dependency>
 			<groupId>org.hibernate.orm</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>6.4.10.Final</version>
+			<artifactId>hibernate-core</artifactId> <!-- Proporciona el soporte para JPA con Hibernate -->
+			<version>6.4.10.Final</version> <!-- Especifica la versión de Hibernate Core -->
 		</dependency>
+
 	</dependencies>
 
+	<!-- Configuración de la compilación -->
 	<build>
 		<plugins>
+			<!-- Plugin de Maven para Spring Boot -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<artifactId>spring-boot-maven-plugin</artifactId> <!-- Permite ejecutar la aplicación como un archivo JAR ejecutable -->
 			</plugin>
 		</plugins>
 	</build>
+
 </project>
