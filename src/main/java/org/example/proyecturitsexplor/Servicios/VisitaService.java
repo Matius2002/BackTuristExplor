@@ -1,6 +1,5 @@
 package org.example.proyecturitsexplor.Servicios;
 
-
 import com.itextpdf.kernel.events.Event;
 import com.itextpdf.kernel.events.IEventHandler;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -43,12 +42,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
-
 @Service
 public class VisitaService {
 
     private static final Logger logger = LoggerFactory.getLogger(VisitaService.class);
-
 
     @Autowired
     private VisitaRepositorio visitaRepository;
@@ -320,8 +317,4 @@ public class VisitaService {
             workbook.close();
         }
     }
-
-
-
-
 }
