@@ -11,7 +11,7 @@ public class DestinosNotFoundException extends RuntimeException {
         this.id = id; // Asigna el ID recibido al atributo id
     }
 
-    // Método getter para obtener el ID del destino no encontrado
+    // Metodo getter para obtener el ID del destino no encontrado
     public Long getId() {
         return id; // Retorna el valor del atributo id
     }
