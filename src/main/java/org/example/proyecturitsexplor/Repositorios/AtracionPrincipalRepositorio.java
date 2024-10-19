@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface AtracionPrincipalRepositorio extends JpaRepository<AtracionPrincipal, Long> {
-
+    // Metodo para verificar si existe una Atracción Principal por su nombre
+    // Este metodo consulta si hay alguna entidad AtracionPrincipal con el nombre proporcionado
     boolean existsByNombre(String nombre);
 }
+
