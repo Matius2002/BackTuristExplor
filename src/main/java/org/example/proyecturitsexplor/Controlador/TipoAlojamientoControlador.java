@@ -68,7 +68,7 @@ public class TipoAlojamientoControlador {
             }
 
             // Actualiza el tipo de alojamiento y retorna la respuesta
-            TipoAlojamiento tipoAlojamientoActualizadaGuardada = tipoAlojamientoServicio.actulizarTipoAlojamiento(tipoAlojamientoActualizada);
+            TipoAlojamiento tipoAlojamientoActualizadaGuardada = tipoAlojamientoServicio.actualizarTipoAlojamiento(tipoAlojamientoActualizada);
             return new ResponseEntity<>(tipoAlojamientoActualizadaGuardada, HttpStatus.OK); // Retorna un 200 OK con el objeto actualizado
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST); // Retorna un error 400 si hay un problema con la entrada
